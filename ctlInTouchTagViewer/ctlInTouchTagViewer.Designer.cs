@@ -31,8 +31,8 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.lbGroup = new System.Windows.Forms.ListBox();
             this.lvTags = new System.Windows.Forms.ListView();
-            this.Tag = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.cTag = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.cName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -50,7 +50,6 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.lvTags);
-            this.splitContainer1.Panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.splitContainer1_Panel2_Paint_1);
             this.splitContainer1.Size = new System.Drawing.Size(822, 503);
             this.splitContainer1.SplitterDistance = 274;
             this.splitContainer1.TabIndex = 2;
@@ -70,26 +69,30 @@
             // lvTags
             // 
             this.lvTags.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.Tag,
-            this.Name});
+            this.cTag,
+            this.cName});
+            this.lvTags.FullRowSelect = true;
             this.lvTags.GridLines = true;
             this.lvTags.HideSelection = false;
             this.lvTags.Location = new System.Drawing.Point(3, 3);
+            this.lvTags.MultiSelect = false;
             this.lvTags.Name = "lvTags";
+            this.lvTags.ShowGroups = false;
             this.lvTags.Size = new System.Drawing.Size(538, 497);
+            this.lvTags.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvTags.TabIndex = 0;
             this.lvTags.UseCompatibleStateImageBehavior = false;
             this.lvTags.View = System.Windows.Forms.View.Details;
             // 
-            // Tag
+            // cTag
             // 
-            this.Tag.Text = "Тэг";
-            this.Tag.Width = 200;
+            this.cTag.Text = "Тэг";
+            this.cTag.Width = 200;
             // 
-            // Name
+            // cName
             // 
-            this.Name.Text = "Наименование";
-            this.Name.Width = 300;
+            this.cName.Text = "Наименование";
+            this.cName.Width = 300;
             // 
             // ctlInTouchTagViewer
             // 
@@ -110,7 +113,7 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.ListBox lbGroup;
         private System.Windows.Forms.ListView lvTags;
-        private System.Windows.Forms.ColumnHeader Tag;
-        private System.Windows.Forms.ColumnHeader Name;
+        private System.Windows.Forms.ColumnHeader cTag;
+        private System.Windows.Forms.ColumnHeader cName;
     }
 }
