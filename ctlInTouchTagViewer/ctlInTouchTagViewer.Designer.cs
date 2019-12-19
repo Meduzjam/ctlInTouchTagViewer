@@ -38,6 +38,7 @@
             this.tbSearch = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.cbExpertMode = new System.Windows.Forms.CheckBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -48,9 +49,6 @@
             // 
             // splitContainer1
             // 
-            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainer1.Location = new System.Drawing.Point(3, 69);
             this.splitContainer1.Name = "splitContainer1";
             // 
@@ -147,8 +145,6 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.tbSearch);
             this.groupBox1.Location = new System.Drawing.Point(6, 10);
             this.groupBox1.Name = "groupBox1";
@@ -159,7 +155,6 @@
             // 
             // cbExpertMode
             // 
-            this.cbExpertMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cbExpertMode.AutoSize = true;
             this.cbExpertMode.Location = new System.Drawing.Point(688, 29);
             this.cbExpertMode.Name = "cbExpertMode";
@@ -169,17 +164,29 @@
             this.cbExpertMode.UseVisualStyleBackColor = true;
             this.cbExpertMode.CheckStateChanged += new System.EventHandler(this.checkBox1_CheckStateChanged);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(733, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(35, 13);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "label1";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
+            // 
             // ctlInTouchTagViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.cbExpertMode);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.splitContainer1);
             this.Name = "ctlInTouchTagViewer";
-            this.Size = new System.Drawing.Size(768, 436);
-            this.Load += new System.EventHandler(this.ctlInTouchTagViewer_Load);
+            this.Size = new System.Drawing.Size(771, 438);
+            this.Load += new System.EventHandler(this.ctlInTouchTagViewer_Load_1);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ctlInTouchTagViewer_KeyDown);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.ResumeLayout(false);
@@ -203,5 +210,6 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.CheckBox cbExpertMode;
+        private System.Windows.Forms.Label label1;
     }
 }

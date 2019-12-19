@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Reflection;
 
 namespace ctlInTouchTagViewer
 {
@@ -28,9 +29,11 @@ namespace ctlInTouchTagViewer
 
         private Microsoft.VisualBasic.FileIO.TextFieldParser parser;
         private List<InTouchTag> ltags;
+        private List<string> lgroups;
         private String srcFile = @"D:\WORK\2017\ПСП Михайловская\export.csv";
         private bool _expertMode = false;
         private string _expertStr = "_man _man_en _chnsignal _deactiv _invert _delayfront _filter_t _elect _filter_on";
+        private bool _simple = true;
 
         private bool checkExpertStr(string item)
         {
@@ -70,6 +73,15 @@ namespace ctlInTouchTagViewer
             }
         }
 
+        public float SelectedTag_Min_EU
+        {
+            get
+            {
+                //return lvTags.SelectedItems.Count > 0 ? ltags.Where(item => item.name == lvTags.SelectedItems[0].Text).ToList()[0].MinEU : 0;
+                return lvTags.SelectedItems.Count > 0 ? Convert.ToSingle(lvTags.SelectedItems[0].SubItems[3].Text) : 0;
+            }
+        }
+
         public float SelectedTag_Max_EU
         {
             get
@@ -79,14 +91,7 @@ namespace ctlInTouchTagViewer
             }
         }
 
-        public float SelectedTag_Min_EU
-        {
-            get
-            {
-                //return lvTags.SelectedItems.Count > 0 ? ltags.Where(item => item.name == lvTags.SelectedItems[0].Text).ToList()[0].MinEU : 0;
-                return lvTags.SelectedItems.Count > 0 ? Convert.ToSingle(lvTags.SelectedItems[0].SubItems[3].Text) : 0;
-            }
-        }
+
 
 
         public String SrcFile
@@ -134,6 +139,8 @@ namespace ctlInTouchTagViewer
                 {
                     tbSearchChange();
                 }
+
+                lvTags.Columns[0].Width = Convert.ToInt32(_expertMode) * 150;
             }
         }
 
@@ -142,8 +149,8 @@ namespace ctlInTouchTagViewer
             InitializeComponent();
 
             ltags = new List<InTouchTag>();
-
-
+            lgroups = new List<string>();
+            
         }
 
 
@@ -165,7 +172,6 @@ namespace ctlInTouchTagViewer
                     ListViewItem nitem;
                     nitem = lvTags.Items.Add(s.name);
                     nitem.SubItems.Add(s.comment);
-
                     nitem.SubItems.Add(s.EU);
                     nitem.SubItems.Add(s.MinEU.ToString());
                     nitem.SubItems.Add(s.MaxEU.ToString());
@@ -208,6 +214,9 @@ namespace ctlInTouchTagViewer
                         ListViewItem nitem;
                         nitem = lvTags.Items.Add(s.name);
                         nitem.SubItems.Add(s.comment);
+                        nitem.SubItems.Add(s.EU);
+                        nitem.SubItems.Add(s.MinEU.ToString());
+                        nitem.SubItems.Add(s.MaxEU.ToString());
                     }
                 }
                 finally
@@ -217,12 +226,17 @@ namespace ctlInTouchTagViewer
             }
         }
 
-        private void ctlInTouchTagViewer_Load(object sender, EventArgs e)
+
+        public void LoadData()
         {
 
 
             int ttype = 0;
-            List<string> tlist = new List<string>();
+            lgroups.Clear();
+            ltags.Clear();
+            lbGroup.Items.Clear();
+            lvTags.Items.Clear();
+
             try
             {
                 parser = new Microsoft.VisualBasic.FileIO.TextFieldParser(srcFile, System.Text.Encoding.Default);
@@ -265,7 +279,8 @@ namespace ctlInTouchTagViewer
                     if (s.IndexOf(":") < 0)
                         continue;
 
-                    ltags.Add(new InTouchTag {
+                    ltags.Add(new InTouchTag
+                    {
                         name = row[0],
                         comment = s,
                         group = s.Substring(0, s.IndexOf(":") + 1),
@@ -274,13 +289,8 @@ namespace ctlInTouchTagViewer
                         MinEU = (ttype == 1) ? -1 : Convert.ToSingle(row[12])
                     }); ;
 
-                    
-
-                    if (!tlist.Exists(delegate (String text) { return text == ltags[ltags.Count-1].group; }))
-                        tlist.Add(ltags[ltags.Count - 1].group);
-
-
-
+                    if (!lgroups.Exists(delegate (String text) { return text == ltags[ltags.Count - 1].group; }))
+                        lgroups.Add(ltags[ltags.Count - 1].group);
                 }
             }
 
@@ -289,17 +299,24 @@ namespace ctlInTouchTagViewer
                 //MessageBox.Show(ex.Message);
             }
 
-
+            
             lbGroup.BeginUpdate();
             try
             {
-                foreach (string s in tlist)
+                foreach (string s in lgroups)
                     lbGroup.Items.Add(s.Substring(0, s.Length - 1));
             }
             finally
             {
                 lbGroup.EndUpdate();
             }
+
+        }
+
+        private void ctlInTouchTagViewer_Load(object sender, EventArgs e)
+        {
+
+
 
         }
 
@@ -338,6 +355,30 @@ namespace ctlInTouchTagViewer
         private void checkBox1_CheckStateChanged(object sender, EventArgs e)
         {
             ExpertMode = cbExpertMode.Checked;
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            LoadData();
+        }
+
+        private void ctlInTouchTagViewer_KeyDown(object sender, KeyEventArgs e)
+        {
+  
+
+        }
+
+        private void ctlInTouchTagViewer_Load_1(object sender, EventArgs e)
+        {
+#if DEBUG
+                LoadData();
+#endif
+            label1.Text = "v."+Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
 
         }
     }
