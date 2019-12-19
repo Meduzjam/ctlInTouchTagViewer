@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BackgroundWordFilter.cs" />
     <Compile Include="ctlInTouchTagViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>

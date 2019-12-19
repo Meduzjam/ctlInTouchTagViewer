@@ -16,57 +16,206 @@ namespace ctlInTouchTagViewer
         public string name;
         public string comment;
         public string group;
+        public string EU;
+        public float MinEU;
+        public float MaxEU;
     }
 
 
     public partial class ctlInTouchTagViewer : UserControl
     {
 
+
         private Microsoft.VisualBasic.FileIO.TextFieldParser parser;
         private List<InTouchTag> ltags;
         private String srcFile = @"D:\WORK\2017\ПСП Михайловская\export.csv";
-        private bool simpleMode;
+        private bool _expertMode = false;
+        private string _expertStr = "_man _man_en _chnsignal _deactiv _invert _delayfront _filter_t _elect _filter_on";
 
+        private bool checkExpertStr(string item)
+        {
+            if (_expertMode)
+                return false;
+
+            foreach (string s in _expertStr.Split(' '))
+            {
+                if (item.ToLower().EndsWith(s))
+                    return true;
+            }
+            return false;
+        }
+
+        public String SelectedTag_Name
+        {
+            get
+            {
+                return lvTags.SelectedItems.Count > 0 ? lvTags.SelectedItems[0].Text : "";
+            }
+        }
+
+        public String SelectedTag_Comment
+        {
+            get
+            {
+                return lvTags.SelectedItems.Count > 0 ? lvTags.SelectedItems[0].SubItems[1].Text : "";
+            }
+        }
+
+        public String SelectedTag_EU
+        {
+            get
+            {
+                //return lvTags.SelectedItems.Count > 0 ? ltags.Where(item=>item.name == lvTags.SelectedItems[0].Text).ToList()[0].EU : "";
+                return lvTags.SelectedItems.Count > 0 ? lvTags.SelectedItems[0].SubItems[2].Text : "";
+            }
+        }
+
+        public float SelectedTag_Max_EU
+        {
+            get
+            {
+                //return lvTags.SelectedItems.Count > 0 ? ltags.Where(item => item.name == lvTags.SelectedItems[0].Text).ToList()[0].MaxEU : 100;
+                return lvTags.SelectedItems.Count > 0 ? Convert.ToSingle(lvTags.SelectedItems[0].SubItems[4].Text) : 100;
+            }
+        }
+
+        public float SelectedTag_Min_EU
+        {
+            get
+            {
+                //return lvTags.SelectedItems.Count > 0 ? ltags.Where(item => item.name == lvTags.SelectedItems[0].Text).ToList()[0].MinEU : 0;
+                return lvTags.SelectedItems.Count > 0 ? Convert.ToSingle(lvTags.SelectedItems[0].SubItems[3].Text) : 0;
+            }
+        }
 
 
         public String SrcFile
         {
-            // Retrieves the value of the private variable colBColor.
             get
             {
                 return srcFile;
             }
-            // Stores the selected value in the private variable colBColor, and
-            // updates the background color of the label control lblDisplay.
             set
             {
                 srcFile = value;
             }
         }
 
-        public bool SimpleMode
+        public String ExpertStr
+        {
+            get
+            {
+                return _expertStr;
+            }
+
+            set
+            {
+                _expertStr = value;
+            }
+        }
+
+        public bool ExpertMode
         {
             // Retrieves the value of the private variable colBColor.
             get
             {
-                return simpleMode;
+                return _expertMode;
             }
             // Stores the selected value in the private variable colBColor, and
             // updates the background color of the label control lblDisplay.
             set
             {
-                simpleMode = value;
+                _expertMode = value;
+                if (tbSearch.Text.Length == 0)
+                {
+                    lbGroupSelect();
+                }
+                else
+                {
+                    tbSearchChange();
+                }
             }
         }
 
         public ctlInTouchTagViewer()
         {
             InitializeComponent();
+
             ltags = new List<InTouchTag>();
 
 
         }
 
+
+        private void lbGroupSelect()
+        {
+            lvTags.Items.Clear();
+            if (lbGroup.SelectedItems.Count == 0)
+                return;
+
+            lvTags.BeginUpdate();
+            try
+            {
+                //foreach (InTouchTag s in ltags.FindAll(delegate (InTouchTag item) { return item.group.StartsWith(lbGroup.SelectedItems[0] + ":"); }))
+                foreach (InTouchTag s in ltags.Where(item => (item.group == lbGroup.SelectedItems[0] + ":")
+                                                                            && !checkExpertStr(item.name)
+                                                                            ).OrderBy(item => item.comment))
+                {
+
+                    ListViewItem nitem;
+                    nitem = lvTags.Items.Add(s.name);
+                    nitem.SubItems.Add(s.comment);
+
+                    nitem.SubItems.Add(s.EU);
+                    nitem.SubItems.Add(s.MinEU.ToString());
+                    nitem.SubItems.Add(s.MaxEU.ToString());
+
+                }
+            }
+            finally
+            {
+                lvTags.EndUpdate();
+            }
+        }
+
+        private void tbSearchChange()
+        {
+            //if (e.KeyCode != Keys.Enter)
+            //    return;
+
+            lvTags.Items.Clear();
+            if (tbSearch.Text.Length > 2)
+            {
+                lvTags.BeginUpdate();
+
+
+
+
+                try
+                {
+                    //foreach (InTouchTag s in ltags.FindAll(delegate (InTouchTag item) { return item.comment.ToLower().Contains(textBox1.Text.ToLower()); }))
+
+                    //foreach (InTouchTag s in ltags.Where(item => item.comment.ToLower().Contains(textBox1.Text.ToLower())).Take(20))
+
+                    foreach (InTouchTag s in ltags.Where(item => item.comment.ToLower().Contains(tbSearch.Text.ToLower())
+                                                                            && !checkExpertStr(item.name)
+                                                                            ).OrderBy(item => item.comment).Take(20))
+
+
+
+                    {
+
+                        ListViewItem nitem;
+                        nitem = lvTags.Items.Add(s.name);
+                        nitem.SubItems.Add(s.comment);
+                    }
+                }
+                finally
+                {
+                    lvTags.EndUpdate();
+                }
+            }
+        }
 
         private void ctlInTouchTagViewer_Load(object sender, EventArgs e)
         {
@@ -91,7 +240,7 @@ namespace ctlInTouchTagViewer
                     }
                     else
                     if (row[0].StartsWith(":IOReal"))
-                    { //47-1
+                    { //47-1  13-1
                         ttype = 2;
                         continue;
                     }
@@ -116,7 +265,14 @@ namespace ctlInTouchTagViewer
                     if (s.IndexOf(":") < 0)
                         continue;
 
-                    ltags.Add(new InTouchTag { name = row[0], comment = s, group = s.Substring(0, s.IndexOf(":") + 1) });
+                    ltags.Add(new InTouchTag {
+                        name = row[0],
+                        comment = s,
+                        group = s.Substring(0, s.IndexOf(":") + 1),
+                        EU = ttype > 1 ? row[10] : "",
+                        MaxEU = (ttype == 1) ? 2 : Convert.ToSingle(row[13]),
+                        MinEU = (ttype == 1) ? -1 : Convert.ToSingle(row[12])
+                    }); ;
 
                     
 
@@ -130,7 +286,7 @@ namespace ctlInTouchTagViewer
 
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                //MessageBox.Show(ex.Message);
             }
 
 
@@ -150,25 +306,39 @@ namespace ctlInTouchTagViewer
 
         private void lbGroup_SelectedIndexChanged_1(object sender, EventArgs e)
         {
-
-            lvTags.Items.Clear();
-            if (lbGroup.SelectedItems.Count == 0)
+            if (lbGroup.SelectedIndex == -1)
                 return;
 
-            lvTags.BeginUpdate();
-            try
-            {
-                foreach (InTouchTag s in ltags.FindAll(delegate (InTouchTag item) { return item.group.StartsWith(lbGroup.SelectedItems[0] + ":"); }))
-                {
-                    lvTags.Items.Add(s.name);
-                    lvTags.Items[lvTags.Items.Count - 1].SubItems.Add(s.comment);
-                }
-            }
-            finally
-            {
-                lvTags.EndUpdate();
-            }
+            tbSearch.Clear();
+            lbGroupSelect();
+
         }
 
+        private void splitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
+        {
+
+        }
+
+
+        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+
+        
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            if (tbSearch.TextLength == 0)
+                return;
+
+            lbGroup.SelectedIndex = -1;
+            tbSearchChange();
+        }
+
+        private void checkBox1_CheckStateChanged(object sender, EventArgs e)
+        {
+            ExpertMode = cbExpertMode.Checked;
+
+        }
     }
 }
