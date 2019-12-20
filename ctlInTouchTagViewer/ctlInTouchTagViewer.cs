@@ -291,19 +291,26 @@ namespace ctlInTouchTagViewer
 
                     if (!lgroups.Exists(delegate (String text) { return text == ltags[ltags.Count - 1].group; }))
                         lgroups.Add(ltags[ltags.Count - 1].group);
+
+
                 }
+                
             }
 
             catch (System.Exception ex)
             {
-                //MessageBox.Show(ex.Message);
+                
+                #if DEBUG
+
+                    MessageBox.Show(ex.Message);
+                #endif
             }
 
-            
+
             lbGroup.BeginUpdate();
             try
             {
-                foreach (string s in lgroups)
+                foreach (string s in lgroups.OrderBy(item=>item))
                     lbGroup.Items.Add(s.Substring(0, s.Length - 1));
             }
             finally
@@ -371,9 +378,9 @@ namespace ctlInTouchTagViewer
 
         private void ctlInTouchTagViewer_Load_1(object sender, EventArgs e)
         {
-#if DEBUG
+            #if DEBUG
                 LoadData();
-#endif
+            #endif
             label1.Text = "v."+Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
 
