@@ -274,7 +274,7 @@ namespace ctlInTouchTagViewer
                         continue;
 
 
-                    string s = row[17 * Convert.ToInt32(ttype == 1) + 46 * Convert.ToInt32(ttype == 2) + 45 * Convert.ToInt32(ttype == 3)];
+                    string s = row[17 * Convert.ToInt32(ttype == 1) + 46 * Convert.ToInt32(ttype == 2 || ttype == 3)];
 
                     if (s.IndexOf(":") < 0)
                         continue;
@@ -305,7 +305,10 @@ namespace ctlInTouchTagViewer
                     MessageBox.Show(ex.Message);
                 #endif
             }
-
+            finally
+            {
+                parser.Close();
+            }
 
             lbGroup.BeginUpdate();
             try
