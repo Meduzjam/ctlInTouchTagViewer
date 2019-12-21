@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using System.Reflection;
+using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace ctlInTouchTagViewer
 {
-
-
-    struct InTouchTag
+    internal struct InTouchTag
     {
         public string name;
         public string comment;
@@ -22,18 +19,32 @@ namespace ctlInTouchTagViewer
         public float MaxEU;
     }
 
-
     public partial class ctlInTouchTagViewer : UserControl
     {
-
-
         private Microsoft.VisualBasic.FileIO.TextFieldParser parser;
         private List<InTouchTag> ltags;
         private List<string> lgroups;
         private String srcFile = @"D:\WORK\2017\ПСП Михайловская\export.csv";
         private bool _expertMode = false;
         private string _expertStr = "_man _man_en _chnsignal _deactiv _invert _delayfront _filter_t _elect _filter_on";
-        private bool _simple = true;
+        private bool _grouping = true;
+
+        [Description("Будет ли разбиение на группы по шаблону [ИМЯ АГРЕГАТА: Название параметра].")]
+        public bool Groupring
+        {
+            get
+            {
+                return _grouping;
+            }
+            set
+            {
+                _grouping = value;
+
+                scMain.Panel1Collapsed = !value;
+                if (lbGroup.Items.Count > 0)
+                    lbGroup.SelectedIndex = 0;
+            }
+        }
 
         private bool checkExpertStr(string item)
         {
@@ -48,6 +59,7 @@ namespace ctlInTouchTagViewer
             return false;
         }
 
+        [Description("Имя выделенного тэга")]
         public String SelectedTag_Name
         {
             get
@@ -56,6 +68,7 @@ namespace ctlInTouchTagViewer
             }
         }
 
+        [Description("Коммент тэга")]
         public String SelectedTag_Comment
         {
             get
@@ -64,6 +77,7 @@ namespace ctlInTouchTagViewer
             }
         }
 
+        [Description("Ед.изм тэга")]
         public String SelectedTag_EU
         {
             get
@@ -73,6 +87,7 @@ namespace ctlInTouchTagViewer
             }
         }
 
+        [Description("Мин шкалы тэга")]
         public float SelectedTag_Min_EU
         {
             get
@@ -82,6 +97,7 @@ namespace ctlInTouchTagViewer
             }
         }
 
+        [Description("Макс шкалы тэга")]
         public float SelectedTag_Max_EU
         {
             get
@@ -91,9 +107,7 @@ namespace ctlInTouchTagViewer
             }
         }
 
-
-
-
+        [Description("Путь до файла с выгрузкой базы тэгов InTouch.")]
         public String SrcFile
         {
             get
@@ -106,6 +120,7 @@ namespace ctlInTouchTagViewer
             }
         }
 
+        [Description("Тэги относящиеся к эспертному режиму (резделенные пробелом)")]
         public String ExpertStr
         {
             get
@@ -119,6 +134,7 @@ namespace ctlInTouchTagViewer
             }
         }
 
+        [Description("Режим эксперт позволяет оботразить служебные тэги")]
         public bool ExpertMode
         {
             // Retrieves the value of the private variable colBColor.
@@ -150,9 +166,10 @@ namespace ctlInTouchTagViewer
 
             ltags = new List<InTouchTag>();
             lgroups = new List<string>();
-            
+            label1.Text = "v." + Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
 
+        private const string ALL_TAGS = "ВСЕ ПАРАМЕТРЫ";
 
         private void lbGroupSelect()
         {
@@ -164,18 +181,16 @@ namespace ctlInTouchTagViewer
             try
             {
                 //foreach (InTouchTag s in ltags.FindAll(delegate (InTouchTag item) { return item.group.StartsWith(lbGroup.SelectedItems[0] + ":"); }))
-                foreach (InTouchTag s in ltags.Where(item => (item.group == lbGroup.SelectedItems[0] + ":")
+                foreach (InTouchTag s in ltags.Where(item => ((item.group == lbGroup.SelectedItems[0].ToString() + ":") || (lbGroup.SelectedItems[0].ToString() == ALL_TAGS))
                                                                             && !checkExpertStr(item.name)
                                                                             ).OrderBy(item => item.comment))
                 {
-
                     ListViewItem nitem;
                     nitem = lvTags.Items.Add(s.name);
                     nitem.SubItems.Add(s.comment);
                     nitem.SubItems.Add(s.EU);
                     nitem.SubItems.Add(s.MinEU.ToString());
                     nitem.SubItems.Add(s.MaxEU.ToString());
-
                 }
             }
             finally
@@ -194,9 +209,6 @@ namespace ctlInTouchTagViewer
             {
                 lvTags.BeginUpdate();
 
-
-
-
                 try
                 {
                     //foreach (InTouchTag s in ltags.FindAll(delegate (InTouchTag item) { return item.comment.ToLower().Contains(textBox1.Text.ToLower()); }))
@@ -207,10 +219,7 @@ namespace ctlInTouchTagViewer
                                                                             && !checkExpertStr(item.name)
                                                                             ).OrderBy(item => item.comment).Take(20))
 
-
-
                     {
-
                         ListViewItem nitem;
                         nitem = lvTags.Items.Add(s.name);
                         nitem.SubItems.Add(s.comment);
@@ -226,11 +235,8 @@ namespace ctlInTouchTagViewer
             }
         }
 
-
         public void LoadData()
         {
-
-
             int ttype = 0;
             lgroups.Clear();
             ltags.Clear();
@@ -273,37 +279,31 @@ namespace ctlInTouchTagViewer
                     if (ttype == 0)
                         continue;
 
-
                     string s = row[17 * Convert.ToInt32(ttype == 1) + 46 * Convert.ToInt32(ttype == 2 || ttype == 3)];
 
-                    if (s.IndexOf(":") < 0)
+                    if (s.IndexOf(":") < 0 && Groupring)
                         continue;
 
                     ltags.Add(new InTouchTag
                     {
                         name = row[0],
                         comment = s,
-                        group = s.Substring(0, s.IndexOf(":") + 1),
+                        group = Groupring ? s.Substring(0, s.IndexOf(":") + 1) : "",
                         EU = ttype > 1 ? row[10] : "",
                         MaxEU = (ttype == 1) ? 2 : Convert.ToSingle(row[13]),
                         MinEU = (ttype == 1) ? -1 : Convert.ToSingle(row[12])
                     }); ;
 
-                    if (!lgroups.Exists(delegate (String text) { return text == ltags[ltags.Count - 1].group; }))
+                    if (Groupring && !lgroups.Exists(delegate (String text) { return text == ltags[ltags.Count - 1].group; }))
                         lgroups.Add(ltags[ltags.Count - 1].group);
-
-
                 }
-                
             }
-
             catch (System.Exception ex)
             {
-                
-                #if DEBUG
+#if DEBUG
 
-                    MessageBox.Show(ex.Message);
-                #endif
+                MessageBox.Show(ex.Message);
+#endif
             }
             finally
             {
@@ -311,25 +311,21 @@ namespace ctlInTouchTagViewer
             }
 
             lbGroup.BeginUpdate();
+            lbGroup.Items.Add(ALL_TAGS);
             try
             {
-                foreach (string s in lgroups.OrderBy(item=>item))
+                foreach (string s in lgroups.OrderBy(item => item))
                     lbGroup.Items.Add(s.Substring(0, s.Length - 1));
             }
             finally
             {
                 lbGroup.EndUpdate();
             }
-
         }
 
         private void ctlInTouchTagViewer_Load(object sender, EventArgs e)
         {
-
-
-
         }
-
 
         private void lbGroup_SelectedIndexChanged_1(object sender, EventArgs e)
         {
@@ -338,19 +334,14 @@ namespace ctlInTouchTagViewer
 
             tbSearch.Clear();
             lbGroupSelect();
-
         }
 
         private void splitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
         {
-
         }
-
 
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
-
-        
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -365,7 +356,6 @@ namespace ctlInTouchTagViewer
         private void checkBox1_CheckStateChanged(object sender, EventArgs e)
         {
             ExpertMode = cbExpertMode.Checked;
-
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -375,21 +365,17 @@ namespace ctlInTouchTagViewer
 
         private void ctlInTouchTagViewer_KeyDown(object sender, KeyEventArgs e)
         {
-  
-
         }
 
         private void ctlInTouchTagViewer_Load_1(object sender, EventArgs e)
         {
-            #if DEBUG
-                LoadData();
-            #endif
-            label1.Text = "v."+Assembly.GetExecutingAssembly().GetName().Version.ToString();
+#if DEBUG
+            LoadData();
+#endif
         }
 
         private void label1_Click(object sender, EventArgs e)
         {
-
         }
     }
 }

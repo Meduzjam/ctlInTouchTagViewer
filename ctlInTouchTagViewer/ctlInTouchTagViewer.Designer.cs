@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.scMain = new System.Windows.Forms.SplitContainer();
+            this.gbGroup = new System.Windows.Forms.GroupBox();
             this.lbGroup = new System.Windows.Forms.ListBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.lvTags = new System.Windows.Forms.ListView();
@@ -39,43 +39,43 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.cbExpertMode = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
+            this.scMain.Panel1.SuspendLayout();
+            this.scMain.Panel2.SuspendLayout();
+            this.scMain.SuspendLayout();
+            this.gbGroup.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // splitContainer1
+            // scMain
             // 
-            this.splitContainer1.Location = new System.Drawing.Point(3, 69);
-            this.splitContainer1.Name = "splitContainer1";
+            this.scMain.Location = new System.Drawing.Point(3, 69);
+            this.scMain.Name = "scMain";
             // 
-            // splitContainer1.Panel1
+            // scMain.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.groupBox2);
+            this.scMain.Panel1.Controls.Add(this.gbGroup);
             // 
-            // splitContainer1.Panel2
+            // scMain.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.groupBox3);
-            this.splitContainer1.Size = new System.Drawing.Size(762, 366);
-            this.splitContainer1.SplitterDistance = 189;
-            this.splitContainer1.TabIndex = 2;
-            this.splitContainer1.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitContainer1_SplitterMoved);
+            this.scMain.Panel2.Controls.Add(this.groupBox3);
+            this.scMain.Size = new System.Drawing.Size(762, 366);
+            this.scMain.SplitterDistance = 189;
+            this.scMain.TabIndex = 2;
+            this.scMain.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitContainer1_SplitterMoved);
             // 
-            // groupBox2
+            // gbGroup
             // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.gbGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Controls.Add(this.lbGroup);
-            this.groupBox2.Location = new System.Drawing.Point(3, 3);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(183, 360);
-            this.groupBox2.TabIndex = 1;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Группы";
+            this.gbGroup.Controls.Add(this.lbGroup);
+            this.gbGroup.Location = new System.Drawing.Point(3, 3);
+            this.gbGroup.Name = "gbGroup";
+            this.gbGroup.Size = new System.Drawing.Size(183, 360);
+            this.gbGroup.TabIndex = 1;
+            this.gbGroup.TabStop = false;
+            this.gbGroup.Text = "Группы";
             // 
             // lbGroup
             // 
@@ -182,15 +182,15 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cbExpertMode);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.splitContainer1);
+            this.Controls.Add(this.scMain);
             this.Name = "ctlInTouchTagViewer";
             this.Size = new System.Drawing.Size(771, 438);
             this.Load += new System.EventHandler(this.ctlInTouchTagViewer_Load_1);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ctlInTouchTagViewer_KeyDown);
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            this.splitContainer1.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
+            this.scMain.Panel1.ResumeLayout(false);
+            this.scMain.Panel2.ResumeLayout(false);
+            this.scMain.ResumeLayout(false);
+            this.gbGroup.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -200,13 +200,13 @@
         }
 
         #endregion
-        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.SplitContainer scMain;
         private System.Windows.Forms.ListBox lbGroup;
         private System.Windows.Forms.ListView lvTags;
         private System.Windows.Forms.ColumnHeader cTag;
         private System.Windows.Forms.ColumnHeader cName;
         private System.Windows.Forms.TextBox tbSearch;
-        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox gbGroup;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.CheckBox cbExpertMode;
