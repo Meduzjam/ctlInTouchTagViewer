@@ -28,8 +28,22 @@ namespace ctlInTouchTagViewer
         private bool _expertMode = false;
         private string _expertStr = "_man _man_en _chnsignal _deactiv _invert _delayfront _filter_t _elect _filter_on";
         private bool _grouping = true;
+        private int _search_result_count = 20;
 
-        [Description("Будет ли разбиение на группы по шаблону [ИМЯ АГРЕГАТА: Название параметра].")]
+        [Description("Макс количество результатов поиска")]
+        public int Search_result_count
+        {
+            get
+            {
+                return _search_result_count;
+            }
+            set
+            {
+                _search_result_count = value;
+            }
+        }
+
+        [Description("Будет ли разбиение на группы по шаблону [ИМЯ АГРЕГАТА: Название параметра]")]
         public bool Groupring
         {
             get
@@ -40,7 +54,7 @@ namespace ctlInTouchTagViewer
             {
                 _grouping = value;
 
-                scMain.Panel1Collapsed = !value;
+                //scMain.Panel1Collapsed = !value;
                 if (lbGroup.Items.Count > 0)
                     lbGroup.SelectedIndex = 0;
             }
@@ -217,7 +231,7 @@ namespace ctlInTouchTagViewer
 
                     foreach (InTouchTag s in ltags.Where(item => item.comment.ToLower().Contains(tbSearch.Text.ToLower())
                                                                             && !checkExpertStr(item.name)
-                                                                            ).OrderBy(item => item.comment).Take(20))
+                                                                            ).OrderBy(item => item.comment).Take(Search_result_count))
 
                     {
                         ListViewItem nitem;
@@ -334,10 +348,6 @@ namespace ctlInTouchTagViewer
 
             tbSearch.Clear();
             lbGroupSelect();
-        }
-
-        private void splitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
-        {
         }
 
         private void textBox1_KeyDown(object sender, KeyEventArgs e)

@@ -62,7 +62,6 @@
             this.scMain.Size = new System.Drawing.Size(762, 366);
             this.scMain.SplitterDistance = 189;
             this.scMain.TabIndex = 2;
-            this.scMain.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitContainer1_SplitterMoved);
             // 
             // gbGroup
             // 
