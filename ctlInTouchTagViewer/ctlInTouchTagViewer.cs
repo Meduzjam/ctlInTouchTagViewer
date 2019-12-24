@@ -22,8 +22,8 @@ namespace ctlInTouchTagViewer
 
     public partial class ctlInTouchTagViewer : UserControl
     {
-        private const string ALL_TAGS = "ВСЕ ПАРАМЕТРЫ";
-        private const string FAV_TAGS = "ИЗБРАННЫЕ ПАРАМЕТРЫ";
+        private const string ALL_TAGS = "ВСЕ";
+        private const string FAV_TAGS = "ИЗБРАННЫЕ";
 
         private List<InTouchTag> ltags;
         private List<string> lgroups;
@@ -200,8 +200,8 @@ namespace ctlInTouchTagViewer
             {
                 //foreach (InTouchTag s in ltags.FindAll(delegate (InTouchTag item) { return item.group.StartsWith(lbGroup.SelectedItems[0] + ":"); }))
                 foreach (InTouchTag s in ltags.Where(item => ((item.group == lbGroup.SelectedItems[0].ToString() + ":")
-                                                                    || (lbGroup.SelectedItems[0].ToString() == ALL_TAGS) // Все тэгт
-                                                                    || ((lbGroup.SelectedItems[0].ToString() == FAV_TAGS) && item.favorite)) // Избранные
+                                                                    || (lbGroup.SelectedIndex == 0) // Все тэгт
+                                                                    || ((lbGroup.SelectedIndex == 1) && item.favorite)) // Избранные
                                                                 && !checkExpertStr(item.name)
                                                              ).OrderBy(item => item.comment))
                 {
