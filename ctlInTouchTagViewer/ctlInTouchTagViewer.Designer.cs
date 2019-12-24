@@ -33,12 +33,13 @@
             this.lbGroup = new System.Windows.Forms.ListBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.lvTags = new System.Windows.Forms.ListView();
-            this.cTag = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.cComment = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.cName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tbSearch = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.cbExpertMode = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.cEU = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.scMain.Panel1.SuspendLayout();
             this.scMain.Panel2.SuspendLayout();
             this.scMain.SuspendLayout();
@@ -106,9 +107,11 @@
             this.lvTags.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.lvTags.CheckBoxes = true;
             this.lvTags.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.cTag,
-            this.cName});
+            this.cComment,
+            this.cName,
+            this.cEU});
             this.lvTags.FullRowSelect = true;
             this.lvTags.GridLines = true;
             this.lvTags.HideSelection = false;
@@ -120,16 +123,17 @@
             this.lvTags.TabIndex = 0;
             this.lvTags.UseCompatibleStateImageBehavior = false;
             this.lvTags.View = System.Windows.Forms.View.Details;
+            this.lvTags.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.lvTags_ItemChecked);
             // 
-            // cTag
+            // cComment
             // 
-            this.cTag.Text = "Тэг";
-            this.cTag.Width = 0;
+            this.cComment.Text = "Наименование";
+            this.cComment.Width = 400;
             // 
             // cName
             // 
-            this.cName.Text = "Наименование";
-            this.cName.Width = 500;
+            this.cName.Text = "Имя тэга";
+            this.cName.Width = 0;
             // 
             // tbSearch
             // 
@@ -166,12 +170,17 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(703, 0);
+            this.label1.Location = new System.Drawing.Point(730, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 7;
             this.label1.Text = "label1";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.label1.Click += new System.EventHandler(this.label1_Click);
+            // 
+            // cEU
+            // 
+            this.cEU.Text = "Ед. изм.";
             // 
             // ctlInTouchTagViewer
             // 
@@ -202,7 +211,7 @@
         private System.Windows.Forms.SplitContainer scMain;
         private System.Windows.Forms.ListBox lbGroup;
         private System.Windows.Forms.ListView lvTags;
-        private System.Windows.Forms.ColumnHeader cTag;
+        private System.Windows.Forms.ColumnHeader cComment;
         private System.Windows.Forms.ColumnHeader cName;
         private System.Windows.Forms.TextBox tbSearch;
         private System.Windows.Forms.GroupBox gbGroup;
@@ -210,5 +219,6 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.CheckBox cbExpertMode;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ColumnHeader cEU;
     }
 }
