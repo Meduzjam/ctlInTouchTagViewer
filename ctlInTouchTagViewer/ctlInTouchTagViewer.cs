@@ -333,21 +333,21 @@ namespace ctlInTouchTagViewer
 
                     string s = row[17 * Convert.ToInt32(ttype == 1) + 46 * Convert.ToInt32(ttype == 2 || ttype == 3) + 12 * Convert.ToInt32(ttype == 4)];
 
-                    if (s.IndexOf(":") < 0 && Groupring)
+                    if (s.Length == 0)
                         continue;
 
                     ltags.Add(new InTouchTag
                     {
                         name = row[0],
                         comment = s,
-                        group = Groupring ? s.Substring(0, s.IndexOf(":") + 1) : "",
-                        EU = ttype > 1 ? row[10] : "",
-                        maxEU = (ttype == 1) ? 2 : Convert.ToSingle(row[13]),
-                        minEU = (ttype == 1) ? -1 : Convert.ToSingle(row[12]),
+                        group = (Groupring && s.IndexOf(":") > 0) ? s.Substring(0, s.IndexOf(":") + 1) : "",
+                        EU = (ttype == 2) || (ttype == 3) ? row[10] : "",
+                        maxEU = (ttype == 1) || (ttype == 4) ? 2 : Convert.ToSingle(row[13]),
+                        minEU = (ttype == 1) || (ttype == 4) ? -1 : Convert.ToSingle(row[12]),
                         favorite = lfav.Contains(row[0])
                     });
 
-                    if (Groupring && !lgroups.Exists(delegate (String text) { return text == ltags[ltags.Count - 1].group; }))
+                    if ((Groupring && s.IndexOf(":") > 0) && !lgroups.Exists(delegate (String text) { return text == ltags[ltags.Count - 1].group; }))
                         lgroups.Add(ltags[ltags.Count - 1].group);
                 }
             }
