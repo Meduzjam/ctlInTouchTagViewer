@@ -28,10 +28,10 @@ namespace ctlInTouchTagViewer
         private List<InTouchTag> ltags;
         private List<string> lgroups;
         private List<string> lfav;
-        private String srcFile = @"D:\WORK\2017\ПСП Михайловская\export.csv";
+        private String srcFile = @"D:\WORK\2017\ПСП Михайловская\DB.csv";
         private String favFile = "favtags.csv";
         private bool _expertMode = false;
-        private string _expertStr = "_man _man_en _chnsignal _deactiv _invert _delayfront _filter_t _elect _filter_on";
+        private string _expertStr = "_man _man_en _chnsignal _deactiv _invert _delayfront _filter_t _elect _filter_on _signaltype";
         private bool _grouping = true;
         private int _search_result_count = 20;
 
@@ -371,6 +371,8 @@ namespace ctlInTouchTagViewer
             {
                 lbGroup.EndUpdate();
             }
+
+            lbGroup.SelectedIndex = lbGroup.Items.IndexOf(FAV_TAGS);
         }
 
         public void SaveFav()
